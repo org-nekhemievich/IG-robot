@@ -62,6 +62,7 @@ exports.isAuthenticated = (req, res, next) => {
 exports.isAuthorized = (req, res, next) => {
   const provider = req.path.split('/')[2];
   const token = req.user.tokens.find((token) => token.kind === provider);
+
   if (token) {
     if (token.accessTokenExpires && moment(token.accessTokenExpires).isBefore(moment().subtract(1, 'minutes'))) {
       if (token.refreshToken) {

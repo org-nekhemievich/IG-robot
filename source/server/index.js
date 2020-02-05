@@ -6,14 +6,18 @@ const chalk = require('chalk');
 const errorHandler = require('errorhandler');
 const dotenv = require('dotenv');
 const flash = require('express-flash');
+const path = require('path');
 const passport = require('passport');
+const expressStatusMonitor = require('express-status-monitor');
 
-dotenv.config({ path: '../../.env.example' });
+dotenv.config({ path: path.resolve(__dirname, '../../.env.example') });
 
 const app = express();
 const passportConfig = require('./config/passport');
 const apiController = require('./controllers/api');
 
+app.set('port', process.env.PORT || 3000);
+app.use(expressStatusMonitor());
 app.use(compression());
 app.use(logger('dev'));
 app.use(bodyParser.json());
@@ -40,7 +44,7 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 app.listen(app.get('port'), () => {
-  console.log('%s App is running at http://localhost:%d in %s mode', chalk.green('✓'), app.get('port'), app.get('env'));
+  console.log('%s http://localhost:%d in %s mode', chalk.green('✓'), app.get('port'), app.get('env'));
   console.log('  Press CTRL-C to stop\n');
 });
 
