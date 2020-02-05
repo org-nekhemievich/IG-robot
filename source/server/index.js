@@ -27,6 +27,8 @@ app.use(passport.session());
 app.use(flash());
 app.disable('x-powered-by');
 
+app.get('/', (req, res) => res.json({ message: 'IG Robot' }));
+
 app.get('/api/instagram', passportConfig.isAuthenticated, passportConfig.isAuthorized, apiController.getInstagram);
 
 app.get('/auth/instagram', passport.authenticate('instagram', { scope: ['basic', 'public_content'] }));
