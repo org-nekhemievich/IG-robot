@@ -1,7 +1,7 @@
 const puppeter = require('puppeteer');
 
 const BASE_URL = 'https://instagram.com/';
-const INSTA = (nome) => `https://instagram.com/${nome}`;
+const INSTA = (nome) => `https://instagram.com/explore/tags/${nome}`;
 
 const instagram = {
   browser: null,
@@ -28,7 +28,7 @@ const instagram = {
     await instagram.page.waitFor('a > svg[aria-label="Profile"]');
   },
 
-  curtirFotos: async (nomes = []) => {
+  like: async (nomes = []) => {
     for (let nome of nomes) {
       await instagram.page.goto(INSTA(nome), { waitUntil: 'networkidle2' });
       let fotos = await instagram.page.$$('article > div img[decoding="auto"]');
