@@ -1,4 +1,4 @@
-class likeOtherFeed {
+class CommentAPost {
   constructor(props) {
     if (!props.getBody || !props.getLinks) return false;
 
@@ -98,7 +98,7 @@ class likeOtherFeed {
 
 }
 
-new likeOtherFeed({
+new CommentAPost({
   getBody: () => document.getElementsByTagName('body')[0],
   getLinks: () => document.querySelectorAll('article')[0].querySelectorAll('a'),
   getModal: () => document.querySelectorAll('article')[1],

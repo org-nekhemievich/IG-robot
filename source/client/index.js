@@ -1,4 +1,4 @@
-const ig = require('./like-feed');
+const ig = require('./like');
 
 (async () => {
   await ig.initialize();

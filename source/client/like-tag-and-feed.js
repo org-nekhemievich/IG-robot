@@ -1,4 +1,4 @@
-class likeOtherFeed {
+class LikeTagAndFeed {
   constructor(props) {
     if (!props.getBody || !props.getLinks) return false;
 
@@ -88,7 +88,7 @@ class likeOtherFeed {
 
 }
 
-new likeOtherFeed({
+new LikeTagAndFeed({
   getBody: () => document.getElementsByTagName('body')[0],
   getLinks: () => document.querySelectorAll('article')[0].querySelectorAll('a'),
   getModal: () => document.querySelectorAll('article')[1],
@@ -96,7 +96,7 @@ new likeOtherFeed({
   getLikeButtonText: likeButton => likeButton.firstChild.getAttribute('aria-label'),
   getCloseButton: () => document.querySelectorAll('button')[document.querySelectorAll('button').length-1],
   deslikeText: 'Descurtir',
-  start: 22,
+  start: 0,
   count: 1,
   interval: 3000
 });
