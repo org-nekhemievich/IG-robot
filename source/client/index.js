@@ -6,4 +6,5 @@ const ig = require('./like-feed');
   await ig.like([process.env.IG_TAG]);
 })()
 
-// IG_USERNAME=username IG_PASSWORD=password IG_TAG=javascript node ./source/client
+// IG_TYPE=profile or tag
+// IG_TYPE=tag IG_USERNAME=username IG_PASSWORD=password IG_TAG=javascript node ./source/client
