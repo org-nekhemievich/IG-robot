@@ -1,51 +1,56 @@
-(function(start, count, interval) {
-  const selector = '.wpO6b';
+const puppeter = require('puppeteer');
 
-  const toArray = selector => {
-    elems = document.querySelectorAll(selector);
-    ret_elems = [];
-    for (var i in elems) {
-      if (elems[i].nodeType == 1) {
-        ret_elems.push(elems[i]);
-      }
-    }
-    return ret_elems;
-  }
+const BASE_URL = 'https://instagram.com/';
+const INSTA = (nome) => `https://instagram.com/${nome}`;
 
-  const _body = () => document.getElementsByTagName('body')[0];
-  const _getButtons = () => toArray(selector);
-  const _plusOrMinus = () => Math.random() < 0.5 ? -1 : 1;
-  const _randomTimeout = () => (_plusOrMinus() * Math.floor((Math.random() * 500))) + 1500;
-  const _scrollToBottom = () => _body().scrollTop = _body().scrollHeight;
+const instagram = {
+  browser: null,
+  page: null,
 
-  function _like(els, idx) {
-    if (!els || typeof els === 'undefined' || els.length < 1) {
-      console.log('Ran out of posts. Scrolling to bottom...')
-      _scrollToBottom();
-      setTimeout(() => {}, 750);
-    }
-
-    return els.map(el => {
-      if (el.firstChild.getAttribute('aria-label') === 'Curtir') {
-        setTimeout(() => {
-          el.click()
-          console.log(`CLICKED -> ${idx}`)
-        }, _randomTimeout())
-      } else {
-        // console.log(`Skipped -> ${idx}`)
-      }
+  initialize: async () => {
+    instagram.browser = await puppeter.launch({
+      headless: false
     });
+    instagram.page = await instagram.browser.newPage();
+    await instagram.page.goto(BASE_URL, { waitUntil: 'networkidle2' });
+  },
+
+  login: async (username, password) => {
+    await instagram.page.goto(BASE_URL, { waitUntil: 'networkidle2' });
+    let loginButton = await instagram.page.$x('//a[contains(text(), "Log in")]');
+    await loginButton[0].click();
+    await instagram.page.waitFor(1000);
+    await instagram.page.type('input[name=username]', username, { delay: 50 });
+    await instagram.page.type('input[name=password]', password, { delay: 50 });
+    loginButton = await instagram.page.$x('//div[contains(text(), "Log In")]');
+    await loginButton[0].click();
+    await instagram.page.waitFor(3000);
+    await instagram.page.waitFor('a > svg[aria-label="Profile"]');
+  },
+
+  curtirFotos: async (nomes = []) => {
+    for (let nome of nomes) {
+      await instagram.page.goto(INSTA(nome), { waitUntil: 'networkidle2' });
+      let fotos = await instagram.page.$$('article > div img[decoding="auto"]');
+      await instagram.page.waitFor(2000);
+
+      for (let i = 0; i < fotos.length; i++) {
+        let foto = fotos[i];
+        await foto.click();
+        await instagram.page.waitFor(1000);
+        const buttons = await instagram.page.$$('button.wpO6b');
+        const len = (await instagram.page.$$('button[class^="wpO6b"]')).length;
+        let curtir = await instagram.page.$('button[class^="wpO6b"] svg[aria-label="Like"]');
+
+        if (curtir) {
+          await buttons[0].click();
+        }
+
+        await instagram.page.waitFor(2000);
+        await buttons[len -1].click();
+      }
+    }
   }
+}
 
-  let idx = start
-  const getInterval = () => interval + _randomTimeout()
-  const setNewTimeout = () => setTimeout(() => {
-    console.log(`Starting over at ${idx}!`)
-    const elsArr = toArray(selector);
-    _like(elsArr.slice(idx, idx+count), idx)
-    idx += count
-    setNewTimeout()
-  }, getInterval())
-
-  setNewTimeout()
-})(0, 3, 4000)
+module.exports = instagram;
