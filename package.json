@@ -9,14 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/org-nekhemievich/IG-robot.git"
+    "url": "git+https://github.com/nvich/IG-robot.git"
   },
   "author": "Hemerson Vianna <hemerson.lourenco@gmail.com> (https://nerdcalistenico.com.br)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/org-nekhemievich/IG-robot/issues"
+    "url": "https://github.com/nvich/IG-robot/issues"
   },
-  "homepage": "https://github.com/org-nekhemievich/IG-robot#readme",
+  "homepage": "https://github.com/nvich/IG-robot#readme",
   "dependencies": {
     "body-parser": "1.19.0",
     "chalk": "3.0.0",
